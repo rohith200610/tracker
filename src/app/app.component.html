@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="form-container">
+<h2>Smart Task Tracker</h2>
+<form (ngSubmit)="addTask()" #taskForm="ngForm">
+  <label>Task Name:</label>
+  <input type="text" [(ngModel)]="taskName" name="taskName" required #taskNameInput />
+  
+  <label>Priority:</label>
+  <select [(ngModel)]="priority" name="priority" required>
+    <option value="" disabled selected>Select</option>
+    <option>High</option>
+    <option>Medium</option>
+    <option>Low</option>
+  </select>
+  
+  <label>Due Date:</label>
+  <input type="date" [(ngModel)]="date" name="date" required />
+  
+  <button type="submit">Add Task</button>
+</form>
+
+<div class="filter-buttons">
+  <h4>Filter Task:</h4>
+  <button (click)="filter = 'all'">All Tasks</button>
+  <button (click)="filter = 'completed'">✅ Completed Only</button>
+  <button (click)="filter = 'pending'">⏳ Pending Only</button>
+</div>
+</div>
+<div class="task-list">
+<p>
+  Total: {{ tasks.length }} |  Completed: {{ completedCount }} |  Pending: {{ pendingCount }} |  Overdue: {{ overdueCount }}
+</p>
+<ul>
+  <app-child-task
+    *ngFor="let task of filteredTasks"
+    [task]="task"
+    [isOverdue]="isOverdue(task)"
+    (toggle)="toggleStatus(task)"
+    (delete)="deleteTask(task)"
+  ></app-child-task>
+</ul>
+<div *ngIf="filteredTasks.length === 0">
+  No tasks found.
+</div>
+<button (click)="clearAllTasks()" class="clear-all">🧹 Clear All Tasks</button>
+</div>
+</div>
